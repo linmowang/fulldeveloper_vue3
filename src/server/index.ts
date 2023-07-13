@@ -13,3 +13,6 @@ export const updateUser = (data: any) =>
 
 export const deleteUser = (data: any) =>
   axios.delete(`/user/${data.id}`).then((res) => res.data);
+
+export const addTags = (data: any) =>
+  axios.post("/user/add/tags", data).then((res) => res.data);

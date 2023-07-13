@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // import HelloWorld from './components/HelloWorld.vue'
 import { ref, reactive } from "vue";
-import { addUser, getList, updateUser, deleteUser } from "./server";
+import { addUser, getList, updateUser, deleteUser, addTags } from "./server";
 
 const total = ref(0);
 const search = reactive({
@@ -63,6 +63,30 @@ const save = async () => {
   init();
   dialogVisible.value = false;
 };
+
+// tags
+const row = ref<{
+  id?: number;
+  name?: number;
+  password?: number;
+  createTime?: Date;
+}>({});
+const tagDialogVisiable = ref<boolean>(false);
+const showTagDialog = (rowtemp: any) => {
+  tagDialogVisiable.value = true;
+  row.value = rowtemp;
+};
+
+const tags = ref<string[]>([]);
+const addTagConfirm = async () => {
+  const res = await addTags({
+    tags: tags.value,
+    userId: row.value.id,
+  }).then();
+  console.log(res);
+  tagDialogVisiable.value = false;
+  tags.value = [];
+};
 </script>
 
 <template>
@@ -92,6 +116,14 @@ const save = async () => {
             @click="deleteRow(scope.row)"
             >删除</el-button
           >
+
+          <el-button
+            link
+            type="primary"
+            size="small"
+            @click="showTagDialog(scope.row)"
+            >添加tags</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
@@ -116,6 +148,20 @@ const save = async () => {
         <span class="dialog-footer">
           <el-button @click="close">关闭</el-button>
           <el-button type="primary" @click="save"> 保存 </el-button>
+        </span>
+      </template>
+    </el-dialog>
+
+    <el-dialog v-model="tagDialogVisiable" title="tags">
+      <el-select style="width: 50%" v-model="tags" multiple>
+        <el-option label="tag1" value="tag1" />
+        <el-option label="tag2" value="tag2" />
+        <el-option label="tag3" value="tag3" />
+      </el-select>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="tagDialogVisiable = false">Cancel</el-button>
+          <el-button type="primary" @click="addTagConfirm"> Confirm </el-button>
         </span>
       </template>
     </el-dialog>
