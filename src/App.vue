@@ -70,22 +70,32 @@ const row = ref<{
   name?: number;
   password?: number;
   createTime?: Date;
+  tags?: any;
 }>({});
+
+const resetRow = ref({ ...row });
+
 const tagDialogVisiable = ref<boolean>(false);
 const showTagDialog = (rowtemp: any) => {
   tagDialogVisiable.value = true;
   row.value = rowtemp;
+  tags.value = row.value.tags.map((item: any) => item.tag);
 };
 
 const tags = ref<string[]>([]);
+const closeTagDialog = () => {
+  tagDialogVisiable.value = false;
+  Object.assign(row, resetRow);
+};
 const addTagConfirm = async () => {
   const res = await addTags({
     tags: tags.value,
     userId: row.value.id,
-  }).then();
+  });
   console.log(res);
-  tagDialogVisiable.value = false;
+  closeTagDialog();
   tags.value = [];
+  init();
 };
 </script>
 
@@ -160,7 +170,7 @@ const addTagConfirm = async () => {
       </el-select>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="tagDialogVisiable = false">Cancel</el-button>
+          <el-button @click="closeTagDialog">Cancel</el-button>
           <el-button type="primary" @click="addTagConfirm"> Confirm </el-button>
         </span>
       </template>
