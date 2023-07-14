@@ -7,6 +7,7 @@ import App from "./App.vue";
 import { createRouter, createWebHashHistory } from "vue-router";
 import Boss from "./pages/Boss.vue";
 import Login from "./pages/Login.vue";
+import Upload from "./pages/Upload.vue";
 
 const app = createApp(App);
 
@@ -14,6 +15,7 @@ const routes = [
   // { path: "/", component: Boss },
   { path: "/boss", component: Boss },
   { path: "/login", component: Login },
+  { path: "/upload", component: Upload },
 ];
 
 const router = createRouter({
